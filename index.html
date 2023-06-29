@@ -1,71 +1,88 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Weather intel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />  
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
     <style>
-        body{
-            display: flex;
-            gap : 2rem;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: skyblue;
-        }
+      body {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: skyblue;
+      }
 
-        .container{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-        h1{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .condition{
-            display: flex;
-        }
-        #weatherForm{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            padding-bottom: 0.1rem;
-        }
-        #buttons{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .btn{
-            border-width: 0.05rem;
-            border-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #button1{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      #coordinates {
+        margin-bottom: 2rem;
+      }
+      .forms {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .weatherForm {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        padding-bottom: 0.1rem;
+      }
+      #buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .btn {
+        border-width: 0.05rem;
+        border-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #button1 {
+        margin-top: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     </style>
-</head>
+  </head>
   <body>
     <div id="container">
-        <h1>Find Weather conditions in your area</h1>
-        <div id="conditions">
-        <form name="myForm" action="/" , method="post" id="weatherForm">
+      <h1 style="margin-bottom: 2rem">Find Weather conditions in your area</h1>
+      <div id="coordinates">
+        <p style="text-align: center"><strong>Using Coordinates</strong></p>
+        <div class="forms">
+          <form name="coords" action="/" , method="post" class="weatherForm">
             <div class="inputs">
-                <input
+              <input
                 type="text"
                 ,
                 name="lat"
@@ -73,8 +90,8 @@
                 placeholder="Latitude coordinates"
                 ,
                 value=""
-                />
-                <input
+              />
+              <input
                 type="text"
                 ,
                 name="lon"
@@ -82,16 +99,63 @@
                 placeholder="Longitude coordinates"
                 ,
                 value=""
-                />
+              />
             </div>
-            <button type="submit", name="submit" class="btn">Weather Details</button>
-        </form>
+            <button
+              type="submit"
+              ,
+              name="submit"
+              class="btn"
+              id="coords_weather"
+            >
+              Weather Report
+            </button>
+          </form>
+        </div>
         <div id="button1">
-            <button id="details" class="btn">Get coordinates</button>
+          <button id="details" class="btn">Get coordinates</button>
         </div>
+      </div>
+      <div id="city_details">
+        <p style="text-align: center"><strong>Using City Name</strong></p>
+        <div class="forms">
+          <form name="city" action="/" method="post" class="weatherForm">
+            <input type="text" , name="city" , placeholder="City Name" />
+            <button
+              type="submit"
+              ,
+              name="submit"
+              ,
+              class="btn"
+              ,
+              id="city_weather"
+            >
+              Weather Report
+            </button>
+          </form>
         </div>
+      </div>
     </div>
     <script>
+      document.querySelector("#coords_weather").disabled = true;
+      document.querySelector("#city_weather").disabled = true;
+
+      document
+        .querySelector('input[name="lat"]')
+        .addEventListener("click", () => {
+          document.querySelector("#coords_weather").disabled = false;
+        });
+      document
+        .querySelector('input[name="lon"]')
+        .addEventListener("click", () => {
+          document.querySelector("#coords_weather").disabled = false;
+        });
+      document
+        .querySelector('input[name="city"]')
+        .addEventListener("click", () => {
+          document.querySelector("#city_weather").disabled = false;
+        });
+
       document.querySelector("#details").addEventListener("click", getLocation);
       function getLocation() {
         if (navigator.geolocation) {
@@ -101,12 +165,11 @@
         }
       }
       function getPosition(position) {
-        var lat =
-          position.coords.latitude
-        var lon = 
-          position.coords.longitude
-        myForm.lat.value = lat
-        myForm.lon.value = lon
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        coords.lat.value = lat;
+        coords.lon.value = lon;
+        document.querySelector("#coords_weather").disabled = false;
       }
     </script>
   </body>
